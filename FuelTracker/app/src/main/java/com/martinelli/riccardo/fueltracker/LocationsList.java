@@ -11,15 +11,11 @@ import java.util.*;
 /**
  * Created by Riccardo on 09/04/2016.
  */
-public final class LocationsList extends ArrayList {
+public final class LocationsList extends ArrayList<Location> {
 
-    private double distance = 0.0;
 
-    public boolean add(Object obj){
+    public boolean add(Location obj){
         if(super.add(obj)){
-            if(this.size() != 1) {
-                distance += MathGPS.distance(this.get(this.size() - 1), (Location) obj); // calcola la distanza quando viene aggiunto un nuovo punto. (dopo il primo)
-            }
             return true;
         }else{
             return false;
@@ -27,12 +23,11 @@ public final class LocationsList extends ArrayList {
     }
 
     public Location get(int index){
-        return (Location) super.get(index);
+        return super.get(index);
     }
 
     public void clear(){
         super.clear();
-        distance = 0.0;
     }
 
     public boolean store(Context contesto, String filename){
@@ -55,7 +50,7 @@ public final class LocationsList extends ArrayList {
                 jsontmp2.put("time", String.valueOf(this.get(i).getTime()));
                 ja.put(jsontmp2);
             }
-            jobj.put("distance", distance);
+            jobj.put("distance", MathGPS.calcolateDistanceFromLocationsList(this));
             jobj.put("points", ja);
         }catch (Exception e){
             return false;

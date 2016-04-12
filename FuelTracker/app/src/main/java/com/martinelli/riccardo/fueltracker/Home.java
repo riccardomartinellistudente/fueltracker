@@ -1,12 +1,18 @@
 package com.martinelli.riccardo.fueltracker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.TriggerEvent;
+import android.hardware.TriggerEventListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 
@@ -20,10 +26,27 @@ public class Home extends Activity {
 
     DistanceTracker dt;
 
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+    private TriggerEventListener mTriggerEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //Test Significant Motion Sensor
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION);
+
+        mTriggerEventListener = new TriggerEventListener() {
+            @Override
+            public void onTrigger(TriggerEvent event) {
+                Toast.makeText(getApplicationContext(), "Hey! Significant Motion Sensor!", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        mSensorManager.requestTriggerSensor(mTriggerEventListener, mSensor);
     }
 
     public void OnClickStart(View v){

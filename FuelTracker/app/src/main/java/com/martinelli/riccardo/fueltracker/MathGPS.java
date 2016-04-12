@@ -2,13 +2,15 @@ package com.martinelli.riccardo.fueltracker;
 
 import android.location.Location;
 
+import java.util.Iterator;
+
 /**
  * Created by Riccardo on 08/04/2016.
  */
 public final class MathGPS {
 
     //Distance between two location
-    public static double distance(Location pt1, Location pt2){
+    private static double distance(Location pt1, Location pt2){
 
         double lat1 = pt1.getLatitude();
         double lat2 = pt2.getLatitude();
@@ -38,6 +40,30 @@ public final class MathGPS {
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
         return Math.sqrt(distance);
+    }
+
+    //Calcola distanza tra tutti i punti presenti nella LocationsList
+    public static double calcolateDistanceFromLocationsList(LocationsList locList){
+        Iterator<Location> i = locList.iterator();
+        double distance = 0.0;
+        Location tmp = null;
+        do{
+            if (i.hasNext())
+            {
+                if(tmp == null) {
+                    tmp = i.next();
+                }
+                else {
+                    Location tmp2 = i.next();
+                    distance = distance(tmp, tmp2);
+                    tmp = tmp2;
+                }
+            }
+
+        }while (i.hasNext());
+
+
+        return distance;
     }
 
 }
