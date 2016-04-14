@@ -1,6 +1,7 @@
 package com.martinelli.riccardo.fueltracker;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +45,12 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
 
     private boolean isStarted = false;
 
-    private int indexLastLocation = 0;
+    private int interval = 0;
 
     public DistanceTracker(Context contesto, int interval, int fastestInterval, int priority) {
 
         _contesto = contesto;
+        this.interval = interval;
 
         //Inizializza google api client
         if (mGoogleApiClient == null) {
@@ -67,9 +70,9 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
 
     public void start(){
         if(!isStarted) {
+            isStarted = true;
             Toast.makeText(_contesto, "Start", Toast.LENGTH_SHORT).show();
             mGoogleApiClient.connect();
-            isStarted = true;
         }
     }
 
@@ -84,20 +87,6 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
             Toast.makeText(_contesto, "Stop", Toast.LENGTH_SHORT).show();
             isStarted = false;
         }
-    }
-
-    //da rivedere
-    private void isPrepareToStop(){
-        Location lastLocation = mll.get((mll.size() - 1));
-        if((lastLocation.hasSpeed() && lastLocation.getSpeed() < 4.0) || (true)){
-            indexLastLocation = (mll.size() - 1);
-
-        }
-    }
-
-    //da rivedere
-    private void isPrepareToRestart(){
-
     }
 
     public void updateLocationRequest(int interval, int fastestInterval, int priority){
@@ -118,7 +107,7 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
 
     private void StartLocationUpdates(){
         //Richiesta accesso Posizione
-        if ( ContextCompat.checkSelfPermission(_contesto, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if ( ContextCompat.checkSelfPermission(_contesto, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
 
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
@@ -139,6 +128,23 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
     public void onLocationChanged(Location location) {
         Toast.makeText(_contesto, "Update: " + location.toString(), Toast.LENGTH_LONG).show();
         mll.add(location);
+
+        int lastUsefulPosition = LocationsList.getLastUsefulPositionBeforeStopping(mll, interval*2, 30);
+        if(lastUsefulPosition != -1){
+            mll.store(_contesto, "output.json");
+            this.stop();
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(_contesto)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Fuele Tracker - test")
+                            .setContentText("Sei andato in macchina?");
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) _contesto.getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+            mNotificationManager.notify(1, mBuilder.build());
+        }
         //AddOutput(location);
     }
 

@@ -9,7 +9,7 @@ import java.util.Iterator;
  */
 public final class MathGPS {
 
-    //Distance between two location
+    //Distance between two location - Edited
     public static double distance(Location pt1, Location pt2){
 
         double lat1 = pt1.getLatitude();
@@ -18,11 +18,11 @@ public final class MathGPS {
         double lon2 = pt2.getLongitude();
         double el1 = 0;
         if (pt1.hasAltitude()){
-            el1 = pt1.getAltitude();
+     //       el1 = pt1.getAltitude();
         }
         double el2 = 0;
         if (pt2.hasAltitude()){
-            el2 = pt2.getAltitude();
+     //      el2 = pt2.getAltitude();
         }
 
         final int R = 6371; // Radius of the earth
@@ -39,7 +39,12 @@ public final class MathGPS {
 
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-        return Math.sqrt(distance);
+        //Controllo approssimato se i due punti si potrebbero toccare.
+        double result = Math.sqrt(distance);
+        if(result < pt1.getAccuracy() + pt2.getAccuracy())
+            result = 0;
+
+        return result;
     }
 
     //Calcola distanza tra tutti i punti presenti nella LocationsList

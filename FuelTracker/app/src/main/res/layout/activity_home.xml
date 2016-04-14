@@ -53,7 +53,7 @@
         android:id="@+id/txtInterval"
         android:layout_alignBottom="@+id/textView"
         android:layout_alignParentEnd="true"
-        android:text="20000"
+        android:text="90000"
         android:layout_toEndOf="@+id/textView2"
         android:layout_alignStart="@+id/txtMaxInterval" />
 
@@ -74,7 +74,7 @@
         android:inputType="numberSigned"
         android:ems="10"
         android:id="@+id/txtMaxInterval"
-        android:text="10000"
+        android:text="100"
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignParentEnd="true" />
 
@@ -83,11 +83,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/seekAccuracy"
         android:max="3"
-        android:progress="2"
+        android:progress="3"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp"
-        android:layout_alignEnd="@+id/txtMaxInterval" />
+        android:layout_alignEnd="@+id/txtMaxInterval"
+        android:longClickable="false" />
 
     <TextView
         android:layout_width="wrap_content"

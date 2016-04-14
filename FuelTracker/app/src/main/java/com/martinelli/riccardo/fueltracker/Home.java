@@ -44,7 +44,7 @@ public class Home extends Activity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
 
-        //Inizializza il distance tracker per l'uso in alta precisione.
+        //Inizializza il distance tracker
         dt = new DistanceTracker(getApplicationContext(),90000 , 0, LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         //Test Significant Motion Sensor

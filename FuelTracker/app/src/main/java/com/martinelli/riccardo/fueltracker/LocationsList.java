@@ -13,7 +13,6 @@ import java.util.*;
  */
 public final class LocationsList extends ArrayList<Location> {
 
-
     public boolean add(Location obj){
         if(super.add(obj)){
             return true;
@@ -56,5 +55,33 @@ public final class LocationsList extends ArrayList<Location> {
             return false;
         }
         return StorageJson.store(contesto, filename, jobj);
+    }
+
+    /**
+     *
+     * @param locList
+     * @param delayTime il tempo che deve trascorrere perchè la macchina o la persona venga considerata ferma.
+     * @param maxDistance la distanza massima che la macchina o la persona può percorrere prima di fermarsi. (unità metri)
+     * @return index of the last useful point. (-1 la macchina è im movimento)
+     */
+    public static int getLastUsefulPositionBeforeStopping(LocationsList locList, int delayTime, int maxDistance){
+        int distance = 0;
+        boolean isExit = false;
+        int result = -1;
+
+        for(int i = locList.size() - 1; !isExit; i--){
+            if(i-1 >= 0){
+                distance += MathGPS.distance(locList.get(i), locList.get(i-1));
+                if(distance <= maxDistance  && delayTime <= locList.get(locList.size() - 1).getTime() - locList.get(i-1).getTime()){
+                    result = i - 1;
+                    isExit = true;
+                }
+            }
+            else{
+                isExit = true;
+            }
+        }
+
+        return result;
     }
 }
