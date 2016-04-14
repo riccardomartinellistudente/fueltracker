@@ -10,7 +10,7 @@ import java.util.Iterator;
 public final class MathGPS {
 
     //Distance between two location
-    private static double distance(Location pt1, Location pt2){
+    public static double distance(Location pt1, Location pt2){
 
         double lat1 = pt1.getLatitude();
         double lat2 = pt2.getLatitude();

@@ -3,17 +3,21 @@ package com.martinelli.riccardo.fueltracker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.TriggerEvent;
 import android.hardware.TriggerEventListener;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.google.android.gms.location.LocationRequest;
 
 import org.json.JSONObject;
@@ -35,6 +39,14 @@ public class Home extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Richiesta accesso Posizione
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+
+        //Inizializza il distance tracker per l'uso in alta precisione.
+        dt = new DistanceTracker(getApplicationContext(),90000 , 0, LocationRequest.PRIORITY_HIGH_ACCURACY);
+
         //Test Significant Motion Sensor
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION);
@@ -42,7 +54,8 @@ public class Home extends Activity {
         mTriggerEventListener = new TriggerEventListener() {
             @Override
             public void onTrigger(TriggerEvent event) {
-                Toast.makeText(getApplicationContext(), "Hey! Significant Motion Sensor!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Start tracking.", Toast.LENGTH_SHORT).show();
+                dt.start();
             }
         };
 

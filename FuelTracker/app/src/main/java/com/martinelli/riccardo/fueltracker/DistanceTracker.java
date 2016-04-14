@@ -37,11 +37,15 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    private Activity _contesto; //Serve per sapere da quale activity è stato lanciato il DistanceTracker
+    private Context _contesto; //Serve per sapere da quale activity è stato lanciato il DistanceTracker
 
     private LocationsList mll = new LocationsList(); //Lista per lo store di tutte le locations.
 
-    public DistanceTracker(Activity contesto, int interval, int fastestInterval, int priority) {
+    private boolean isStarted = false;
+
+    private int indexLastLocation = 0;
+
+    public DistanceTracker(Context contesto, int interval, int fastestInterval, int priority) {
 
         _contesto = contesto;
 
@@ -62,18 +66,38 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
     }
 
     public void start(){
-        Toast.makeText(_contesto, "Start", Toast.LENGTH_SHORT).show();
-        mGoogleApiClient.connect();
+        if(!isStarted) {
+            Toast.makeText(_contesto, "Start", Toast.LENGTH_SHORT).show();
+            mGoogleApiClient.connect();
+            isStarted = true;
+        }
     }
 
     public void stop(){
-        StopLocationUpdates();
+        if(isStarted) {
+            StopLocationUpdates();
 
-        mll.store(_contesto, "output.json"); //Salva sulla memoria del telefono tutte le location.
-        mll.clear();
+            mll.store(_contesto, "output.json"); //Salva sulla memoria del telefono tutte le location.
+            mll.clear();
 
-        mGoogleApiClient.disconnect();
-        Toast.makeText(_contesto, "Stop", Toast.LENGTH_SHORT).show();
+            mGoogleApiClient.disconnect();
+            Toast.makeText(_contesto, "Stop", Toast.LENGTH_SHORT).show();
+            isStarted = false;
+        }
+    }
+
+    //da rivedere
+    private void isPrepareToStop(){
+        Location lastLocation = mll.get((mll.size() - 1));
+        if((lastLocation.hasSpeed() && lastLocation.getSpeed() < 4.0) || (true)){
+            indexLastLocation = (mll.size() - 1);
+
+        }
+    }
+
+    //da rivedere
+    private void isPrepareToRestart(){
+
     }
 
     public void updateLocationRequest(int interval, int fastestInterval, int priority){
@@ -96,10 +120,10 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
         //Richiesta accesso Posizione
         if ( ContextCompat.checkSelfPermission(_contesto, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
 
-            ActivityCompat.requestPermissions(_contesto, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
     }
 
     private void StopLocationUpdates(){
@@ -115,7 +139,7 @@ public class DistanceTracker implements GoogleApiClient.OnConnectionFailedListen
     public void onLocationChanged(Location location) {
         Toast.makeText(_contesto, "Update: " + location.toString(), Toast.LENGTH_LONG).show();
         mll.add(location);
-        AddOutput(location);
+        //AddOutput(location);
     }
 
     //Error method -------------
