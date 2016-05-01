@@ -12,7 +12,8 @@
         android:id="@+id/btnStart"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:onClick="OnClickStart" />
+        android:onClick="OnClickStart"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
         android:id="@+id/btnStop"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:onClick="OnClickStop" />
+        android:onClick="OnClickStop"
+        android:visibility="visible" />
 
     <Button
         android:layout_width="wrap_content"
@@ -43,7 +45,8 @@
         android:textSize="20dp"
         android:layout_below="@+id/btnStart"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp" />
+        android:layout_marginTop="22dp"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -55,7 +58,8 @@
         android:layout_alignParentEnd="true"
         android:text="90000"
         android:layout_toEndOf="@+id/textView2"
-        android:layout_alignStart="@+id/txtMaxInterval" />
+        android:layout_alignStart="@+id/txtMaxInterval"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +70,8 @@
         android:textIsSelectable="true"
         android:textSize="20dp"
         android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -76,7 +81,8 @@
         android:id="@+id/txtMaxInterval"
         android:text="100"
         android:layout_alignBottom="@+id/textView2"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible" />
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -88,7 +94,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp"
         android:layout_alignEnd="@+id/txtMaxInterval"
-        android:longClickable="false" />
+        android:longClickable="false"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,7 +103,8 @@
         android:text="NO_POWER"
         android:id="@+id/textView3"
         android:layout_below="@+id/seekAccuracy"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -104,7 +112,8 @@
         android:text="HIGH_ACCURACY"
         android:id="@+id/textView4"
         android:layout_alignTop="@+id/textView3"
-        android:layout_alignEnd="@+id/txtMaxInterval" />
+        android:layout_alignEnd="@+id/txtMaxInterval"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="wrap_content"
@@ -115,6 +124,18 @@
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/txtMaxInterval"
         android:onClick="OnClickUpdateLocationRequest"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open maps"
+        android:id="@+id/btnMaps"
+        android:layout_below="@+id/btnExport"
+        android:layout_marginTop="62dp"
+        android:layout_alignEnd="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:onClick="onClickInMaps" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.martinelli.riccardo.fueltracker;
+package com.martinelli.riccardo.fueltracker.other;
 
 import android.content.Context;
 
@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
  * Created by Riccardo on 07/04/2016.
  */
 public final class StorageJson {
+    private StorageJson(){}
 
     public static boolean store(Context context, String filename, JSONObject obj){
         FileOutputStream outputStream;
