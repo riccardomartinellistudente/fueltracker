@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,7 +20,7 @@ abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedL
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
-    private long detectionIntervalMillis = 0;
+    private long detectionIntervalMillis = 0; //as fast as possibile
 
     private PendingIntent callbackIntent;
 
@@ -75,6 +76,8 @@ abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedL
                     vehicleRecognized();
                 }
             }
+
+            Toast.makeText(context, "ActivityUpdates", Toast.LENGTH_LONG).show();
         }
     }
 
