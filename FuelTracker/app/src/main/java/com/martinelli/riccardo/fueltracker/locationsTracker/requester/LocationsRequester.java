@@ -1,4 +1,4 @@
-package com.martinelli.riccardo.fueltracker.locationsTracker;
+package com.martinelli.riccardo.fueltracker.locationsTracker.requester;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 /**
  * Created by Riccardo on 01/05/2016.
  */
-abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
@@ -24,8 +24,8 @@ abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedL
     private static int noPowerFastestInterval = 0;
     private static int noPowerPriority = LocationRequest.PRIORITY_NO_POWER;
 
-    private int highAccuracyInterval = 1000;
-    private int highAccuracyFastestInterval = 1000;
+    private int highAccuracyInterval = 10000;
+    private int highAccuracyFastestInterval = 5000;
     private int highAccuracyPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     private boolean isHighAccuracyMode = false;
@@ -59,6 +59,13 @@ abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedL
         }
     }
 
+    public void setNoPowerMode(){
+        if(isHighAccuracyMode) {
+            updateLocationRequest(highAccuracyInterval, highAccuracyFastestInterval, highAccuracyPriority);
+            isHighAccuracyMode = false;
+        }
+    }
+
     private void requestLocationUpdates(LocationRequest mLocationRequest){
         if ( ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -70,7 +77,6 @@ abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedL
     }
 
     private void updateLocationRequest(int interval, int fastestInterval, int priority){
-        removeLocationUpdates();
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(interval);
         mLocationRequest.setFastestInterval(fastestInterval);
@@ -80,10 +86,13 @@ abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedL
 
     @Override
     public void onConnected(Bundle bundle) {
+        onLocationRequesterReady();
+
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(noPowerInterval);
         mLocationRequest.setFastestInterval(noPowerFastestInterval);
         mLocationRequest.setPriority(noPowerPriority);
+        isHighAccuracyMode = false;
 
         requestLocationUpdates(mLocationRequest);
     }
@@ -109,4 +118,5 @@ abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedL
     }
 
     public abstract void useLocation(Location location);
+    public abstract void onLocationRequesterReady();
 }

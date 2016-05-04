@@ -2,7 +2,7 @@ package com.martinelli.riccardo.fueltracker.other;
 
 import android.location.Location;
 
-import com.martinelli.riccardo.fueltracker.locationsTracker.LocationsList;
+import com.martinelli.riccardo.fueltracker.locationsTracker.data.LocationsList;
 
 import java.util.Iterator;
 

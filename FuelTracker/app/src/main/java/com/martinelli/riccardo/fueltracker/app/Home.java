@@ -13,7 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.martinelli.riccardo.fueltracker.R;
 import com.martinelli.riccardo.fueltracker.other.StorageJson;
 import com.martinelli.riccardo.fueltracker.locationsTracker.LocationsTracker;
@@ -38,15 +42,21 @@ public class Home extends Activity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
 
-        //Inizializza il locations tracker
-        locationsTracker = new LocationsTracker(getApplicationContext());
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS){
+            Toast.makeText(getApplicationContext(), "GooglePlayServices isn't available.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        //Avvia il distance tracker
-        locationsTracker.start();
+
+        locationsTracker = new LocationsTracker(this.getApplicationContext()){
+            @Override
+            public void onStop(){
+
+            }
+        };
     }
 
     public void OnClickStart(View v){
-
         locationsTracker.start();
     }
 

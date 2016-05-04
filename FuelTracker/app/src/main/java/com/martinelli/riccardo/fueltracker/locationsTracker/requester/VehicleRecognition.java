@@ -1,11 +1,10 @@
-package com.martinelli.riccardo.fueltracker.locationsTracker;
+package com.martinelli.riccardo.fueltracker.locationsTracker.requester;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -16,11 +15,11 @@ import com.google.android.gms.location.DetectedActivity;
 /**
  * Created by Riccardo on 01/05/2016.
  */
-abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
-    private long detectionIntervalMillis = 0; //as fast as possibile
+    private long detectionIntervalMillis = 10000;
 
     private PendingIntent callbackIntent;
 
@@ -48,7 +47,11 @@ abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedL
 
     @Override
     public void onConnected(Bundle bundle){
-        callbackIntent = PendingIntent.getService(context, 0, new Intent(context, ActivityRecognitionService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        onVehicleRecognitionReady();
+        ActivityRecognitionService.vehicleRecognitionForService = this;
+
+        Intent intent = new Intent(context, ActivityRecognitionService.class);
+        callbackIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mGoogleApiClient, detectionIntervalMillis, callbackIntent);
     }
 
@@ -62,25 +65,41 @@ abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedL
 
     }
 
-    private class ActivityRecognitionService extends IntentService{
+
+    public static class ActivityRecognitionService extends IntentService{
+
+        protected static final String TAG = "DetectedActivitiesIS";
+
+        public static VehicleRecognition vehicleRecognitionForService = null;
 
         public ActivityRecognitionService(){
-            super("ActivityRecognitionService");
+            super(TAG);
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
         }
 
         @Override
         protected void onHandleIntent(Intent intent) {
+            if(vehicleRecognitionForService == null)
+                return;
+
             if (ActivityRecognitionResult.hasResult(intent)) {
                 ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-                if (result.getMostProbableActivity().getType() == DetectedActivity.IN_VEHICLE){
-                    vehicleRecognized();
+                switch (result.getMostProbableActivity().getType()){
+                    case DetectedActivity.IN_VEHICLE: vehicleRecognitionForService.vehicleRecognized(); break;
+                    case DetectedActivity.STILL: vehicleRecognitionForService.stillRecognized(); break;
+                    default: Integer.parseInt("2"); break;
                 }
-            }
 
-            Toast.makeText(context, "ActivityUpdates", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
 
     public abstract void vehicleRecognized();
+    public abstract void stillRecognized();
+    public abstract void onVehicleRecognitionReady();
 }

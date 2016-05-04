@@ -1,4 +1,4 @@
-package com.martinelli.riccardo.fueltracker.locationsTracker;
+package com.martinelli.riccardo.fueltracker.locationsTracker.data;
 
 import android.content.Context;
 import android.location.Location;
