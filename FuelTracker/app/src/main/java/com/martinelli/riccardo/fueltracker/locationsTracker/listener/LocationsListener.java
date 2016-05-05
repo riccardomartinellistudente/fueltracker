@@ -1,4 +1,4 @@
-package com.martinelli.riccardo.fueltracker.locationsTracker.requester;
+package com.martinelli.riccardo.fueltracker.locationsTracker.listener;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationServices;
 /**
  * Created by Riccardo on 01/05/2016.
  */
-public abstract class LocationsRequester implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public abstract class LocationsListener implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
@@ -27,10 +27,11 @@ public abstract class LocationsRequester implements GoogleApiClient.OnConnection
     private int highAccuracyInterval = 10000;
     private int highAccuracyFastestInterval = 5000;
     private int highAccuracyPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    private long lastHighAccuracyUpdate = 0;
 
     private boolean isHighAccuracyMode = false;
 
-    public LocationsRequester(Context context){
+    public LocationsListener(Context context){
         this.context = context;
 
         //Inizializza google api client
@@ -61,7 +62,7 @@ public abstract class LocationsRequester implements GoogleApiClient.OnConnection
 
     public void setNoPowerMode(){
         if(isHighAccuracyMode) {
-            updateLocationRequest(highAccuracyInterval, highAccuracyFastestInterval, highAccuracyPriority);
+            updateLocationRequest(noPowerInterval, noPowerFastestInterval, noPowerPriority);
             isHighAccuracyMode = false;
         }
     }
@@ -105,8 +106,6 @@ public abstract class LocationsRequester implements GoogleApiClient.OnConnection
     @Override
     public void onLocationChanged(Location location){
         if (isHighAccuracyMode){
-
-            //Gestire high accuracy
 
         }
         useLocation(location);

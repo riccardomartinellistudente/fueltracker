@@ -1,4 +1,4 @@
-package com.martinelli.riccardo.fueltracker.locationsTracker.requester;
+package com.martinelli.riccardo.fueltracker.locationsTracker.listener;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -19,7 +19,7 @@ public abstract class VehicleRecognition implements GoogleApiClient.OnConnection
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
-    private long detectionIntervalMillis = 10000;
+    private long detectionIntervalMillis = 30000;
 
     private PendingIntent callbackIntent;
 
@@ -91,7 +91,7 @@ public abstract class VehicleRecognition implements GoogleApiClient.OnConnection
                 switch (result.getMostProbableActivity().getType()){
                     case DetectedActivity.IN_VEHICLE: vehicleRecognitionForService.vehicleRecognized(); break;
                     case DetectedActivity.STILL: vehicleRecognitionForService.stillRecognized(); break;
-                    default: Integer.parseInt("2"); break;
+                    default: break;
                 }
 
             }

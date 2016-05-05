@@ -21,6 +21,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".locationsTracker.requester.VehicleRecognition$ActivityRecognitionService" android:enabled="true"/>
+        <service android:name=".locationsTracker.listener.VehicleRecognition$ActivityRecognitionService" android:enabled="true"/>
     </application>
 </manifest>

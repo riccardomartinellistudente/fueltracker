@@ -7,8 +7,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.martinelli.riccardo.fueltracker.R;
 import com.martinelli.riccardo.fueltracker.locationsTracker.data.LocationsList;
-import com.martinelli.riccardo.fueltracker.locationsTracker.requester.LocationsRequester;
-import com.martinelli.riccardo.fueltracker.locationsTracker.requester.VehicleRecognition;
+import com.martinelli.riccardo.fueltracker.locationsTracker.listener.LocationsListener;
+import com.martinelli.riccardo.fueltracker.locationsTracker.listener.VehicleRecognition;
 
 /**
  * Created by Riccardo on 07/04/2016.
@@ -18,12 +18,12 @@ public abstract class LocationsTracker {
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
     LocationsList mLocationsList = new LocationsList(); //Lista per lo store di tutte le locations.
     VehicleRecognition vehicleRecognition;
-    LocationsRequester locationsRequester;
+    LocationsListener locationsRequester;
 
     public LocationsTracker(Context contesto) {
         context = contesto;
 
-        locationsRequester = new LocationsRequester(context) {
+        locationsRequester = new LocationsListener(context) {
             @Override
             public void useLocation(Location location){
                 mLocationsList.add(location);
@@ -44,7 +44,7 @@ public abstract class LocationsTracker {
 
             @Override
             public void stillRecognized(){
-                locationsRequester.setHigAccuracyMode();
+                locationsRequester.setNoPowerMode();
                 creaNotifica("Sono immobile", "Zzzzz...", 002);
             }
 
