@@ -50,7 +50,8 @@ public final class MathGPS {
         return result;
     }
 
-    //Calcola distanza tra tutti i punti presenti distinti della LocationsList prediligendo quelli con un maggiore accuracy.
+    //Calcola distanza tra tutti i punti presenti distinti della LocationsList prediligendo quelli con un migliore accuracy.
+    //Da rivedere. Bug delle distanze consecutive.
     public static double calcolateDistanceFromLocationsList(LocationsList locList){
         Iterator<Location> i = locList.iterator();
         double distance = 0.0;

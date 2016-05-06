@@ -30,7 +30,7 @@ public abstract class LocationsTracker {
             }
 
             @Override
-            public void onLocationRequesterStarted(){
+            public void onLocationListenerStarted(){
                 vehicleRecognition.start();
             }
         };
