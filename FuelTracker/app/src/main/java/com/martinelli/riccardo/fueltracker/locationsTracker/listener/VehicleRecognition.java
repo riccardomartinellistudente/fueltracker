@@ -19,7 +19,7 @@ public abstract class VehicleRecognition implements GoogleApiClient.OnConnection
 
     private GoogleApiClient mGoogleApiClient;
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
-    private long detectionIntervalMillis = 30000;
+    private long detectionIntervalMillis = 10000;
 
     private PendingIntent callbackIntent;
 
@@ -90,8 +90,7 @@ public abstract class VehicleRecognition implements GoogleApiClient.OnConnection
                 ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
                 switch (result.getMostProbableActivity().getType()){
                     case DetectedActivity.IN_VEHICLE: vehicleRecognitionForService.vehicleRecognized(); break;
-                    case DetectedActivity.STILL: vehicleRecognitionForService.stillRecognized(); break;
-                    default: break;
+                    default: vehicleRecognitionForService.otherRecognized(); break;
                 }
 
             }
@@ -100,6 +99,6 @@ public abstract class VehicleRecognition implements GoogleApiClient.OnConnection
 
 
     public abstract void vehicleRecognized();
-    public abstract void stillRecognized();
+    public abstract void otherRecognized();
     public abstract void onVehicleRecognitionReady();
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "350358772084",
+    "project_id": "fueltracker-ae9f9"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350358772084:android:878c91f5ca477694",
+        "android_client_info": {
+          "package_name": "com.martinelli.riccardo.fueltracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350358772084-c4kljb7o4dh57sf94mr05qhnh05m17p8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.martinelli.riccardo.fueltracker",
+            "certificate_hash": "B635EC7939A07B85CC33C811BC15896CA6F63781"
+          }
+        },
+        {
+          "client_id": "350358772084-go28nvn1pup3agmnpdljglgbks2nkpqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIJlGz_nPy2FTYn_hatBxGSNiBiZ9TWpM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

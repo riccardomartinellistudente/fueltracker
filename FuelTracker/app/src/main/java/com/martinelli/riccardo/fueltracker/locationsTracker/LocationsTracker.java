@@ -18,34 +18,34 @@ public abstract class LocationsTracker {
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
     LocationsList mLocationsList = new LocationsList(); //Lista per lo store di tutte le locations.
     VehicleRecognition vehicleRecognition;
-    LocationsListener locationsRequester;
+    LocationsListener locationsListener;
 
     public LocationsTracker(Context contesto) {
         context = contesto;
 
-        locationsRequester = new LocationsListener(context) {
+        locationsListener = new LocationsListener(context) {
             @Override
             public void useLocation(Location location){
                 mLocationsList.add(location);
             }
 
             @Override
-            public void onLocationRequesterReady(){
-
+            public void onLocationRequesterStarted(){
+                vehicleRecognition.start();
             }
         };
 
         vehicleRecognition = new VehicleRecognition(context){
             @Override
             public void vehicleRecognized(){
-                locationsRequester.setHigAccuracyMode();
+                locationsListener.setHigAccuracyMode();
                 creaNotifica("Sei in macchina?", "Guida con prudenza!", 001);
             }
 
             @Override
-            public void stillRecognized(){
-                locationsRequester.setNoPowerMode();
-                creaNotifica("Sono immobile", "Zzzzz...", 002);
+            public void otherRecognized(){
+                locationsListener.setNoPowerMode();
+                creaNotifica("Fuel tracker", "Non più alla guida.", 002);
             }
 
             @Override
@@ -57,13 +57,13 @@ public abstract class LocationsTracker {
 
     //Metodo pubblico per arrivare il LocationsTracker.
     public void start() {
-        locationsRequester.start();
-        vehicleRecognition.start();
+        locationsListener.start();
+        //vehicleRecognition avviato dopo l'avvio del locationListner
     }
 
     //Metodo pubblico per disattivare il LocationsTracker.
     public void stop() {
-        locationsRequester.stop();
+        locationsListener.stop();
         vehicleRecognition.stop();
 
         mLocationsList.store(context, "output.json");

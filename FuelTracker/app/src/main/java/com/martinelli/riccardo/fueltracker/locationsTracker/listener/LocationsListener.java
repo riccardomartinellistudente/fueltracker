@@ -87,7 +87,7 @@ public abstract class LocationsListener implements GoogleApiClient.OnConnectionF
 
     @Override
     public void onConnected(Bundle bundle) {
-        onLocationRequesterReady();
+        onLocationRequesterStarted();
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(noPowerInterval);
@@ -117,5 +117,5 @@ public abstract class LocationsListener implements GoogleApiClient.OnConnectionF
     }
 
     public abstract void useLocation(Location location);
-    public abstract void onLocationRequesterReady();
+    public abstract void onLocationRequesterStarted();
 }
