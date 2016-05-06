@@ -10,9 +10,6 @@ import com.martinelli.riccardo.fueltracker.locationsTracker.data.LocationsList;
 import com.martinelli.riccardo.fueltracker.locationsTracker.listener.LocationsListener;
 import com.martinelli.riccardo.fueltracker.locationsTracker.listener.VehicleRecognition;
 
-/**
- * Created by Riccardo on 07/04/2016.
- */
 public abstract class LocationsTracker {
 
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
