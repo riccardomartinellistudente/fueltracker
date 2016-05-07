@@ -1,21 +1,27 @@
 package com.martinelli.riccardo.fueltracker.locationsTracker;
 
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.martinelli.riccardo.fueltracker.R;
 import com.martinelli.riccardo.fueltracker.locationsTracker.data.LocationsList;
 import com.martinelli.riccardo.fueltracker.locationsTracker.listener.LocationsListener;
 import com.martinelli.riccardo.fueltracker.locationsTracker.listener.VehicleRecognition;
 
-public abstract class LocationsTracker {
+public class LocationsTracker{
 
     private Context context; //Serve per sapere da quale activity è stato lanciato il LocationsTracker
     LocationsList mLocationsList = new LocationsList(); //Lista per lo store di tutte le locations.
     VehicleRecognition vehicleRecognition;
     LocationsListener locationsListener;
+
+    public LocationsTracker() {}
 
     public LocationsTracker(Context contesto) {
         context = contesto;
@@ -52,7 +58,6 @@ public abstract class LocationsTracker {
         };
     }
 
-    //Metodo pubblico per arrivare il LocationsTracker.
     public void start() {
         locationsListener.start();
         //vehicleRecognition avviato dopo l'avvio del locationListner
@@ -64,11 +69,14 @@ public abstract class LocationsTracker {
         vehicleRecognition.stop();
 
         mLocationsList.store(context, "output.json");
-        onStop();
+        //onStop();
     }
 
+
+
+
     //Test
-    private void creaNotifica(String title, String text, int id){
+    public void creaNotifica(String title, String text, int id){
         //Test
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
@@ -80,5 +88,5 @@ public abstract class LocationsTracker {
         mNotifyMgr.notify(id, mBuilder.build());
     }
 
-    public abstract void onStop();
+    //public void onStop(){};
 }
