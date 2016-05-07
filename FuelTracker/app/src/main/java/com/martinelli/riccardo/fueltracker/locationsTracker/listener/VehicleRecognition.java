@@ -12,9 +12,6 @@ import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
-/**
- * Created by Riccardo on 01/05/2016.
- */
 public abstract class VehicleRecognition implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private GoogleApiClient mGoogleApiClient;

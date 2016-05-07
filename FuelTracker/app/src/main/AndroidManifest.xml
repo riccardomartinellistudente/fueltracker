@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <service android:name=".locationsTracker.ServiceTracker" />
         <activity
             android:name=".app.Home"
             android:label="@string/app_name" >

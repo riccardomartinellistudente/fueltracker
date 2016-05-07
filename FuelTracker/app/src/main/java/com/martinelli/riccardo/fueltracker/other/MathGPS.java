@@ -3,6 +3,7 @@ package com.martinelli.riccardo.fueltracker.other;
 import android.location.Location;
 
 import com.martinelli.riccardo.fueltracker.locationsTracker.data.LocationsList;
+import com.martinelli.riccardo.fueltracker.locationsTracker.data.MyLocation;
 
 import java.util.Iterator;
 
@@ -83,37 +84,40 @@ public final class MathGPS {
         return distance;
     }
 
-    /**
-     * metodo per restituire l'ultima posizione interesante della macchina.
-     * @param locList
-     * @param delayTime il tempo che deve trascorrere perchè la macchina o la persona venga considerata ferma.
-     * @param maxDistanceBeforeStopping la distanza massima che la macchina o la persona può percorrere prima di fermarsi. (unità metri)
-     * @return index of the last useful point. (-1 la macchina è im movimento)
-     */
-    public static int getLastUsefulPositionBeforeStopping(LocationsList locList, int delayTime, double maxDistanceBeforeStopping){
-        double distance = 0;
-        boolean isExit = false;
-        int result = -1;
+    //da rivedre
+    public static LocationsList clearLocationsList(LocationsList locList){
+        LocationsList newLocList = new LocationsList();
 
-        LocationsList myLocationList = new LocationsList();
-        for(int i = locList.size() - 1; !isExit; i--){
-            if(i-1 >= 0){
-                myLocationList.add(locList.get(i));
-                if(delayTime <= locList.get(locList.size() - 1).getTime() - locList.get(i).getTime()){
-                   if(calcolateDistanceFromLocationsList(myLocationList) <= maxDistanceBeforeStopping){
-                        result = i-1;
-                   }else{
+        Location bestLocationWhenIsOther = null;
+        Location tmp = null;
 
-                   }
-                    isExit = true;
+        for (int i = 0; i < locList.size(); i++){
+            tmp = locList.get(i);
+            if(tmp instanceof MyLocation){
+                MyLocation ml = (MyLocation)tmp;
+                if(ml.getsituation() == MyLocation.TAG_IN_VEHICLE){
+                    if(bestLocationWhenIsOther!= null){
+                        newLocList.add(bestLocationWhenIsOther);
+                        bestLocationWhenIsOther = null;
+                    }
+                    newLocList.add(ml);
+                }
+                if(ml.getsituation() == MyLocation.TAG_OTHER){
+                    if (bestLocationWhenIsOther == null)
+                        bestLocationWhenIsOther = tmp;
+                    if(tmp.getAccuracy() < bestLocationWhenIsOther.getAccuracy())
+                        bestLocationWhenIsOther = tmp;
                 }
             }
             else{
-                isExit = true;
+                newLocList.add(tmp); // Non dovrebbe accadere, ma nn si sa mai.
             }
 
         }
 
-        return result;
+        if(tmp != null && bestLocationWhenIsOther != null )
+            newLocList.add(bestLocationWhenIsOther);
+
+        return newLocList;
     }
 }

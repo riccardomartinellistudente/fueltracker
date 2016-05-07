@@ -11,10 +11,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.martinelli.riccardo.fueltracker.locationsTracker.data.MyLocation;
 
-/**
- * Created by Riccardo on 01/05/2016.
- */
 public abstract class LocationsListener implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private GoogleApiClient mGoogleApiClient;
@@ -106,7 +104,10 @@ public abstract class LocationsListener implements GoogleApiClient.OnConnectionF
     @Override
     public void onLocationChanged(Location location){
         if (isHighAccuracyMode){
-            //Potrebbe fare qualcosa no? :)
+            location = new MyLocation(location, MyLocation.TAG_IN_VEHICLE);
+        }
+        else {
+            location = new MyLocation(location, MyLocation.TAG_OTHER);
         }
         useLocation(location);
     }

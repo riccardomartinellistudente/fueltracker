@@ -15,10 +15,11 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.appdatasearch.GetRecentContextCall;
+//import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.martinelli.riccardo.fueltracker.R;
+import com.martinelli.riccardo.fueltracker.locationsTracker.ServiceTracker;
 import com.martinelli.riccardo.fueltracker.other.StorageJson;
 import com.martinelli.riccardo.fueltracker.locationsTracker.LocationsTracker;
 
@@ -48,20 +49,24 @@ public class Home extends Activity {
         }
 
 
-        locationsTracker = new LocationsTracker(this.getApplicationContext()){
-            @Override
+        //locationsTracker = new LocationsTracker(this.getApplicationContext()){
+            /*@Override
             public void onStop(){
 
-            }
-        };
+            }*/
+        //};
     }
 
     public void OnClickStart(View v){
-        locationsTracker.start();
+        //locationsTracker.start();
+        Intent ServiceIntent = new Intent(this, ServiceTracker.class);
+        startService(ServiceIntent);
     }
 
     public void OnClickStop(View v){
-        locationsTracker.stop();
+        //locationsTracker.stop();
+        Intent ServiceIntent = new Intent(this, ServiceTracker.class);
+        stopService(ServiceIntent);
     }
 
     public void OnClickExport(View v){
