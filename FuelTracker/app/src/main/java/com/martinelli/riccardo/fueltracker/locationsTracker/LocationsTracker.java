@@ -21,8 +21,6 @@ public class LocationsTracker{
     VehicleRecognition vehicleRecognition;
     LocationsListener locationsListener;
 
-    public LocationsTracker() {}
-
     public LocationsTracker(Context contesto) {
         context = contesto;
 
